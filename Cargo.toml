@@ -23,6 +23,7 @@ uuid = { version = "1.16.0", features = ["v4"] }
 [dev-dependencies]
 linked-data = "0.1.2"
 oxigraph = "0.4.9"
+langtag = "0.4.0"
 
 [patch.crates-io]
 linked-data-core = { path = "../linked-data-core" }

@@ -814,6 +814,7 @@ name = "linked-data-sparql"
 version = "0.1.0"
 dependencies = [
  "iref",
+ "langtag",
  "linked-data",
  "linked-data-sparql-derive",
  "oxigraph",

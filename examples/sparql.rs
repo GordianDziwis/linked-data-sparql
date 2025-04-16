@@ -7,7 +7,7 @@ enum Enum {
     Left(String),
 
     #[ld("ex:right")]
-    Right(Struct),
+    Right(String),
 }
 
 fn main() {

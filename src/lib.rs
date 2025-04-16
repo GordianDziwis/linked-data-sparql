@@ -6,10 +6,15 @@ use spargebra::term::{
 use sparopt::Optimizer;
 use uuid::Uuid;
 
+// TODO get rid
+extern crate self as linked_data_sparql;
+
+#[cfg(test)]
 mod rdf_type_conversions;
+pub use linked_data_sparql_derive::Sparql;
 
 #[derive(Default)]
-struct ConstructQuery {
+pub struct ConstructQuery {
     construct_template: Vec<TriplePattern>,
     where_pattern: GraphPattern,
 }
@@ -30,7 +35,7 @@ pub trait SparqlQuery {
     }
 }
 
-trait ToConstructQuery {
+pub trait ToConstructQuery {
     fn to_query_with_binding(binding_variable: Variable) -> ConstructQuery;
 
     fn to_query() -> ConstructQuery {
@@ -38,20 +43,20 @@ trait ToConstructQuery {
     }
 }
 
-trait And {
+pub trait And {
     fn and(self, other: Self) -> Self;
 }
 
-trait Join {
+pub trait Join {
     fn join(self, other: Self) -> Self;
 }
 
-trait Union {
+pub trait Union {
     fn union(self, other: Self) -> Self;
 }
 
 impl ConstructQuery {
-    fn new(
+    pub fn new(
         subject: impl Into<TermPattern>,
         predicate: impl Into<NamedNodePattern>,
         object: impl Into<TermPattern>,
@@ -67,7 +72,7 @@ impl ConstructQuery {
         }
     }
 
-    fn new_with_binding<F>(
+    pub fn new_with_binding<F>(
         subject: Variable,
         predicate: NamedNode,
         to_query_with_binding: F,
@@ -80,7 +85,7 @@ impl ConstructQuery {
             .join(to_query_with_binding(object))
     }
 
-    fn union_with_binding<F>(
+    pub fn union_with_binding<F>(
         self,
         subject: Variable,
         predicate: NamedNode,
@@ -94,7 +99,7 @@ impl ConstructQuery {
             .join(to_query_with_binding(object))
     }
 
-    fn join_with_binding<F>(
+    pub fn join_with_binding<F>(
         self,
         subject: Variable,
         predicate: NamedNode,
@@ -108,7 +113,7 @@ impl ConstructQuery {
             .join(to_query_with_binding(object))
     }
 
-    fn join_with(
+    pub fn join_with(
         self,
         subject: Variable,
         predicate: NamedNode,
@@ -117,7 +122,7 @@ impl ConstructQuery {
         self.join(ConstructQuery::new(subject, predicate, object))
     }
 
-    fn filter_variable(self, variable: Variable, id: NamedNode) -> Self {
+    pub fn filter_variable(self, variable: Variable, id: NamedNode) -> Self {
         let expr = Expression::Equal(
             Box::new(Expression::Variable(variable)),
             Box::new(Expression::NamedNode(id)),
@@ -237,7 +242,10 @@ mod tests {
     use std::fmt;
 
     use iref::IriBuf;
-    use linked_data::{to_quads_with, Deserialize, LinkedData, LinkedDataDeserializeSubject, Serialize};
+    use linked_data::{
+        Deserialize, LinkedData, LinkedDataDeserializeSubject, Serialize,
+        to_quads_with,
+    };
     use linked_data_sparql_derive::Sparql;
     use oxigraph::sparql::QueryResults;
     use oxigraph::store::Store;
@@ -248,9 +256,8 @@ mod tests {
     use rdf_types::{Generator, RdfDisplay};
     use spargebra::term::{NamedNode, Variable};
 
-    use crate::rdf_type_conversions::IntoRdfTypes;
-
     use super::*;
+    use crate::rdf_type_conversions::IntoRdfTypes;
 
     pub fn to_nquads(value: &impl LinkedData<WithGenerator<Blank>>) -> String {
         let mut interpretation = WithGenerator::new((), Blank::new());
@@ -317,9 +324,7 @@ mod tests {
     // 	}
     // }
 
-    #[derive(
-        Sparql, Serialize, Deserialize, Debug, Default, PartialEq,
-    )]
+    #[derive(Sparql, Serialize, Deserialize, Debug, Default, PartialEq)]
     #[ld(type = "http://ex/Type")]
     #[ld(prefix("ex" = "http://ex/"))]
     struct StuctType {
