@@ -1,18 +1,35 @@
 [package]
 name = "linked-data-sparql"
-version = "0.1.0"
-edition = "2024"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "SPARQL query generation for linked data"
 
-[lib]
-proc-macro = true
+[workspace.package]
+license = "MIT"
+edition = "2024"
+version = "0.1.0"
 
 [dependencies]
-linked-data-core = "0.1.0"
-proc-macro-error = "1.0.4"
-proc-macro2 = "1.0.94"
-syn = { version = "2.0.100", features = ["visit"] }
-quote = "1.0.40"
-iref = { version = "3.2.2", features = ["serde"] }
+# linked-data-core = "0.1.0"
+iref.workspace = true
+linked-data-sparql-derive = { path = "./derive", version = "0.1.0" }
+oxttl = "0.1.7"
+rdf-types = "0.22.5"
+spargebra = "0.3.5"
+sparopt = "0.2.1"
+uuid = { version = "1.16.0", features = ["v4"] }
+
+[dev-dependencies]
+linked-data = "0.1.2"
+oxigraph = "0.4.9"
 
 [patch.crates-io]
 linked-data-core = { path = "../linked-data-core" }
+
+[workspace]
+members = ["derive"]
+
+[workspace.dependencies]
+linked-data-derive = { version = "0.1.0", path = "derive" }
+iref = "3.2.2"
