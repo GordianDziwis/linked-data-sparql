@@ -2,7 +2,7 @@ use linked_data_core::attributes::variant::PredicatePath;
 use linked_data_core::r#enum::{Enum, Variant};
 use linked_data_core::r#struct::{Field, Struct};
 use linked_data_core::{LinkedDataType, TokenGenerator};
-use proc_macro_error::{abort, proc_macro_error};
+use proc_macro_error::proc_macro_error;
 use proc_macro2::TokenStream;
 use quote::ToTokens;
 use syn::DeriveInput;
